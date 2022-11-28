@@ -5,11 +5,12 @@ import Loader from "../../Components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllScrapsList } from "./../../redux/reducers/scrap-slice";
 import CustomTable from "../../Components/CustomTable/CustomTable";
+import ScrapCard from "../../Components/Cards/ScrapCard";
 
 const Scraps = () => {
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
-  const allScrapsList = useSelector((state) => state.scrap.allScrapsList);
+  let allScrapsList = useSelector((state) => state.scrap.allScrapsList);
   const loading = useSelector((state) => state.alert.loading);
 
   const columns = [
@@ -18,7 +19,7 @@ const Scraps = () => {
   ];
 
   useEffect(() => {
-    console.log(allScrapsList);
+    console.log(loading);
     dispatch(getAllScrapsList(token));
   }, []);
 
@@ -28,6 +29,16 @@ const Scraps = () => {
       <Container className={"mt-5"}>
         <Row>
           <Col lg={{ span: 10, offset: 1 }}>
+            {/* {allScrapsList &&
+              allScrapsList.map((scrap) => {
+                return (
+                  <ScrapCard
+                    description={scrap.description}
+                    price={scrap.price}
+                    quantity={scrap.quantity}
+                  />
+                );
+              })} */}
             <CustomTable
               columns={columns}
               list={allScrapsList}

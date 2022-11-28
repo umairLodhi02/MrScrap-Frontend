@@ -1,8 +1,7 @@
 import { Row, Col, Button, Form, FloatingLabel, Modal } from "react-bootstrap";
 import swal from "sweetalert";
 import Loader from "../../Components/Loader";
-import { updateScrap } from "../../services/scrapService";
-import { addScrap } from "../../redux/reducers/scrap-slice";
+import { addScrap, updateScrap } from "../../redux/reducers/scrap-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { Notification } from "grommet";
 
@@ -14,6 +13,18 @@ const AddScrap = (props) => {
   const { scrapToEdit, edit, scrap, setScrap, setModalShow } = props;
 
   const FormFields = [
+    {
+      label: "Enter Scrap Description",
+      value: scrap.description,
+      setValue: (val) =>
+        setScrap((prevData) => ({
+          ...prevData,
+          description: val,
+        })),
+      name: "type",
+      type: "text",
+      required: true,
+    },
     {
       label: "Enter Scrap Type",
       value: scrap.type,
@@ -29,7 +40,6 @@ const AddScrap = (props) => {
     {
       label: "Enter Scrap Quantity",
       value: scrap.quantity,
-
       setValue: (val) =>
         setScrap((prevData) => ({
           ...prevData,
@@ -51,8 +61,12 @@ const AddScrap = (props) => {
       scrap: {
         quantity: scrap.quantity,
         type: scrap.type,
+        location: {
+          latitude: session.location.latitude,
+          longitude: session.location.longitude,
+        },
+        description: scrap.description,
       },
-      userId: session.userId,
     };
     dispatch(addScrap(req, session.token));
     setModalShow(false);
@@ -63,22 +77,15 @@ const AddScrap = (props) => {
       scrap: {
         quantity: scrap.quantity,
         type: scrap.type,
+        location: {
+          latitude: session.location.latitude,
+          longitude: session.location.longitude,
+        },
+        description: scrap.description,
       },
     };
 
-    const res = await updateScrap(req, session.accessToken, scrapToEdit);
-    console.log(res);
-    if (res && res.success) {
-      props.setModalShow(false);
-      swal(res.message);
-      setScrap({
-        quantity: "",
-        type: "",
-      });
-    } else if (res && res.message === "Invalid Token") {
-    } else {
-      swal("Due to some Technical Issue the Server is Down!");
-    }
+    dispatch(updateScrap(req, props.token, scrapToEdit, props.scrapList));
     setModalShow(false);
   };
   const handleSubmit = (event) => {

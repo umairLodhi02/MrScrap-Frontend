@@ -10,7 +10,7 @@ const Navbar = (props) => {
   const dispatch = useDispatch();
   const MenuList = [
     { href: "/scraps", label: "Scraps", className: "a" },
-    { href: "#", label: "Check Rates", className: "a" },
+    { href: "/check-rates", label: "Check Rates", className: "a" },
     { href: "/profile", label: "Profile", className: "a" },
   ];
   return (

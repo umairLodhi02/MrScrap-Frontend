@@ -7,6 +7,7 @@ import ProtectedRoute from "./ProtectedRoutes";
 import Profile from "./../Screens/Profile/Profile";
 import AddScrap from "./../Screens/Scraps/AddScrap";
 import Scraps from "./../Screens/Scraps/Scraps";
+import Rates from "../Screens/Rates/Rates";
 
 const AppRoutes = () => {
   return (
@@ -23,7 +24,11 @@ const AppRoutes = () => {
           path="/scraps"
           component={Scraps}
         ></ProtectedRoute>
-
+        <ProtectedRoute
+          exact
+          path="/check-rates"
+          component={Rates}
+        ></ProtectedRoute>
         <Route exact path="/register" component={Register}></Route>
         <Route exact path="/" component={Login}></Route>
       </Switch>

@@ -16,7 +16,7 @@ const Home = () => {
   const session = useSelector((state) => state.auth.session);
   const loading = useSelector((state) => state.alert.loading);
 
-  const scrapsListByUserId = useSelector(
+  let scrapsListByUserId = useSelector(
     (state) => state.scrap.scrapsListByUserId
   );
 
@@ -34,7 +34,7 @@ const Home = () => {
         console.log("Longitude is :", position.coords.longitude);
         dispatch(
           authActions.setSession({
-            currentLocation: {
+            location: {
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             },

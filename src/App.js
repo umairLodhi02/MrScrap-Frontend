@@ -17,7 +17,7 @@ class App extends Component {
         contactNo: "",
         randomId: "",
         logout: false,
-        currentLocation: {
+        location: {
           latitude: 0.0,
           longitude: 0.0,
         },
@@ -144,15 +144,7 @@ class App extends Component {
   render() {
     return (
       <Grommet theme={dark} full>
-        <userContext.Provider
-          value={{
-            session: this.state.sessionDetail,
-            setSession: this.setSession,
-            logout: this.logout,
-          }}
-        >
-          <AppRoutes />
-        </userContext.Provider>
+        <AppRoutes />
       </Grommet>
     );
   }

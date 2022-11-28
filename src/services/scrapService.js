@@ -14,7 +14,7 @@ export async function addScrapApi(req, token) {
   return data;
 }
 
-export async function updateScrap(req, token, scrapId) {
+export async function updateScrapApi(req, token, scrapId) {
   let httpData = {
     method: "PUT",
     url: `/user/updatescrap/${scrapId}`,

@@ -1,5 +1,5 @@
-import { Table, Button, Card } from "react-bootstrap";
-import { useState } from "react";
+import { Table, Button, Card, Row, Col } from "react-bootstrap";
+import { useState, useEffect } from "react";
 import CustomPagination from "../CustomPagination";
 import AddScrap from "../../Screens/Scraps/AddScrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,8 @@ const CustomTable = ({
   actionButtons,
   mainHeading,
   addModal,
+  ratesTable,
+  pageSize,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const notification = useSelector((state) => state.alert.notification);
@@ -20,11 +22,12 @@ const CustomTable = ({
 
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
-  const [recordsPerPage] = useState(3);
+  const [recordsPerPage] = useState(pageSize ? pageSize : 3);
   const [modal, setModal] = useState(false);
   const [scrapToEdit, setScrapToEdit] = useState("");
-  const [scrap, setScrap] = useState({
+  let [scrap, setScrap] = useState({
     type: "",
+    description: "",
     quantity: "",
   });
   const [edit, setEdit] = useState(false);
@@ -40,6 +43,12 @@ const CustomTable = ({
     setScrapToEdit(item._id);
     setModal(true);
     setEdit(true);
+    setScrap((prevData) => ({
+      ...prevData,
+      type: item.type,
+      quantity: item.quantity,
+      description: item.description,
+    }));
   };
   const handleAdd = () => {
     setModal(true);
@@ -58,6 +67,7 @@ const CustomTable = ({
       ...values,
     }));
   };
+
   return (
     <>
       {loading && <Loader />}
@@ -87,48 +97,82 @@ const CustomTable = ({
               <h3>No Scraps Found</h3>
             </div>
           ) : (
-            <Table responsive striped bordered hover variant="dark" size="md">
-              <thead>
-                <tr>
-                  {columns &&
-                    columns.map((c, index) => {
-                      return <th key={index}>{c.header}</th>;
+            <>
+              <Table responsive striped bordered hover variant="dark" size="md">
+                <thead>
+                  <tr>
+                    {columns &&
+                      columns.map((c, index) => {
+                        return <th key={index}>{c.header}</th>;
+                      })}
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {!ratesTable &&
+                    currentRecords &&
+                    currentRecords.map((row, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{row.quantity}</td>
+                          <td>{row.type}</td>
+                          {addModal && actionButtons && (
+                            <td>
+                              <Button
+                                variant="link"
+                                onClick={() => handleEdit(row)}
+                              >
+                                Edit
+                              </Button>
+
+                              {"/"}
+
+                              <Button
+                                variant="link"
+                                onClick={() => handleDelete(row)}
+                              >
+                                Delete
+                              </Button>
+                            </td>
+                          )}
+                        </tr>
+                      );
                     })}
-                </tr>
-              </thead>
 
-              <tbody>
-                {currentRecords &&
-                  currentRecords.map((row, index) => {
-                    return (
-                      <tr key={index}>
-                        {/* <td>{++index}</td> */}
-                        <td>{row.quantity}</td>
-                        <td>{row.type}</td>
-                        {addModal && actionButtons && (
-                          <td>
-                            <Button
-                              variant="link"
-                              onClick={() => handleEdit(row)}
-                            >
-                              Edit
-                            </Button>
+                  {ratesTable &&
+                    currentRecords &&
+                    currentRecords.map((row, index) => {
+                      return (
+                        <tr key={index}>
+                          {Object.keys(row).map((field) => {
+                            return <td>{row[field]}</td>;
+                          })}
+                          {/* <td>{row.quantity}</td>
+                          <td>{row.type}</td>
+                          {addModal && actionButtons && (
+                            <td>
+                              <Button
+                                variant="link"
+                                onClick={() => handleEdit(row)}
+                              >
+                                Edit
+                              </Button>
 
-                            {"/"}
+                              {"/"}
 
-                            <Button
-                              variant="link"
-                              onClick={() => handleDelete(row)}
-                            >
-                              Delete
-                            </Button>
-                          </td>
-                        )}
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </Table>
+                              <Button
+                                variant="link"
+                                onClick={() => handleDelete(row)}
+                              >
+                                Delete
+                              </Button>
+                            </td> */}
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+            </>
           )}
         </Card.Body>
 
@@ -142,6 +186,7 @@ const CustomTable = ({
           )}
         </Card.Footer>
       </Card>
+
       {addModal && actionButtons && (
         <AddScrap
           modalShow={modal}
@@ -152,6 +197,8 @@ const CustomTable = ({
           setEdit={setEdit}
           scrap={scrap}
           setScrap={setScrap}
+          token={token}
+          scrapList={[...list]}
         ></AddScrap>
       )}
     </>

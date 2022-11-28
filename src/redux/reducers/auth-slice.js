@@ -13,7 +13,7 @@ const authSlice = createSlice({
       contactNo: "",
       token: "",
       profileImgUrl: "",
-      currentLocation: {
+      location: {
         latitude: null,
         longitude: null,
       },
@@ -37,7 +37,7 @@ const authSlice = createSlice({
         contactNo: "",
         token: "",
         profileImgUrl: "",
-        currentLocation: {
+        location: {
           latitude: null,
           longitude: null,
         },
