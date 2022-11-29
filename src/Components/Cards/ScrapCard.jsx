@@ -1,6 +1,17 @@
 import { Card, Row, Col } from "react-bootstrap";
 import { Box, Text } from "grommet";
+import Geocode from "react-geocode";
+
 const ScrapCard = ({ description, quantity, category, location, price }) => {
+  Geocode.fromLatLng("48.8583701", "2.2922926").then(
+    (response) => {
+      const address = response.results[0].formatted_address;
+      console.log({ address });
+    },
+    (error) => {
+      console.error(error);
+    }
+  );
   return (
     <>
       <Card className="bg-dark">

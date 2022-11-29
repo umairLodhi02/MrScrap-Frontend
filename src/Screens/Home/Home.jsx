@@ -22,8 +22,7 @@ const Home = () => {
 
   const columns = [
     // { header: "Sr. NO#", property: "id" },
-    { header: "Quantity", property: "quantity" },
-    { header: "Type", property: "type" },
+    { header: "Details", property: "Details" },
     { header: "Action", property: "action" },
   ];
 

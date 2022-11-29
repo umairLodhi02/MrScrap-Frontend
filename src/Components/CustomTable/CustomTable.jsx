@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteScrapByUser } from "../../redux/reducers/scrap-slice";
 import Loader from "./../Loader";
 import { Notification } from "grommet";
-
+import { Link } from "react-router-dom";
 const CustomTable = ({
   list,
   columns,
@@ -114,8 +114,17 @@ const CustomTable = ({
                     currentRecords.map((row, index) => {
                       return (
                         <tr key={index}>
-                          <td>{row.quantity}</td>
-                          <td>{row.type}</td>
+                          {/* <td>{row.quantity}</td>
+                          <td>{row.type}</td> */}
+
+                          <td>
+                            <Link
+                              to={`/home/${row._id}`}
+                              className="description"
+                            >
+                              {row.description ? row.description : "N/A"}
+                            </Link>
+                          </td>
                           {addModal && actionButtons && (
                             <td>
                               <Button

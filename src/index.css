@@ -193,3 +193,13 @@ ul {
   overflow: hidden;
 }
 /* MODAL  */
+
+/* Custom Table  */
+.description {
+  color: #eee;
+  text-decoration: none;
+  font-size: 20px;
+}
+.description:hover {
+  color: #fff;
+}

@@ -9,7 +9,7 @@ import { authActions } from "./../redux/reducers/auth-slice";
 const Navbar = (props) => {
   const dispatch = useDispatch();
   const MenuList = [
-    { href: "/scraps", label: "Scraps", className: "a" },
+    // { href: "/scraps", label: "Scraps", className: "a" },
     { href: "/check-rates", label: "Check Rates", className: "a" },
     { href: "/profile", label: "Profile", className: "a" },
   ];
@@ -29,7 +29,11 @@ const Navbar = (props) => {
             <Link
               className="h3"
               to={"/home"}
-              style={{ fontStyle: "italic", fontWeight: "600" }}
+              style={{
+                fontStyle: "italic",
+                fontWeight: "600",
+                textDecoration: "none",
+              }}
             >
               Mr. Scrap
             </Link>

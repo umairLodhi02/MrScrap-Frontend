@@ -8,6 +8,7 @@ import Profile from "./../Screens/Profile/Profile";
 import AddScrap from "./../Screens/Scraps/AddScrap";
 import Scraps from "./../Screens/Scraps/Scraps";
 import Rates from "../Screens/Rates/Rates";
+import ScrapCard from "../Components/Cards/ScrapCard";
 
 const AppRoutes = () => {
   return (
@@ -16,14 +17,25 @@ const AppRoutes = () => {
         <ProtectedRoute exact path="/home" component={Home}></ProtectedRoute>
         <ProtectedRoute
           exact
+          path="/home/:id"
+          component={ScrapCard}
+        ></ProtectedRoute>
+
+        <ProtectedRoute
+          exact
           path="/profile"
           component={Profile}
         ></ProtectedRoute>
-        <ProtectedRoute
+        {/* <ProtectedRoute
           exact
           path="/scraps"
           component={Scraps}
         ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/scraps/:id"
+          component={ScrapCard}
+        ></ProtectedRoute> */}
         <ProtectedRoute
           exact
           path="/check-rates"
