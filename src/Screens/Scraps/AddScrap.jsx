@@ -4,6 +4,7 @@ import Loader from "../../Components/Loader";
 import { addScrap, updateScrap } from "../../redux/reducers/scrap-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { Notification } from "grommet";
+import { SCRAP_CATEGORIES } from "./../../constants/ScrapCategories";
 
 const AddScrap = (props) => {
   const dispatch = useDispatch();
@@ -25,18 +26,7 @@ const AddScrap = (props) => {
       type: "text",
       required: true,
     },
-    {
-      label: "Enter Scrap Type",
-      value: scrap.type,
-      setValue: (val) =>
-        setScrap((prevData) => ({
-          ...prevData,
-          type: val,
-        })),
-      name: "type",
-      type: "text",
-      required: true,
-    },
+
     {
       label: "Enter Scrap Quantity",
       value: scrap.quantity,
@@ -47,6 +37,18 @@ const AddScrap = (props) => {
         })),
       name: "quantity",
       type: "number",
+      required: true,
+    },
+    {
+      label: "Select Category",
+      value: scrap.category,
+      setValue: (val) =>
+        setScrap((prevData) => ({
+          ...prevData,
+          category: val,
+        })),
+      name: "quantity",
+      type: "select",
       required: true,
     },
   ];
@@ -60,12 +62,9 @@ const AddScrap = (props) => {
     let req = {
       scrap: {
         quantity: scrap.quantity,
-        type: scrap.type,
-        location: {
-          latitude: session.location.latitude,
-          longitude: session.location.longitude,
-        },
+        address: session.address,
         description: scrap.description,
+        category: scrap.category,
       },
     };
     dispatch(addScrap(req, session.token));
@@ -76,11 +75,8 @@ const AddScrap = (props) => {
     let req = {
       scrap: {
         quantity: scrap.quantity,
-        type: scrap.type,
-        location: {
-          latitude: session.location.latitude,
-          longitude: session.location.longitude,
-        },
+        address: session.address,
+        category: scrap.category,
         description: scrap.description,
       },
     };
@@ -126,20 +122,44 @@ const AddScrap = (props) => {
             {FormFields.map((input, index) => {
               return (
                 <Col key={index} md={{ span: 10, offset: 1 }}>
-                  <FloatingLabel
-                    controlId={index}
-                    label={input.label}
-                    className={`mb-4 text-white`}
-                  >
-                    <Form.Control
-                      type={input.type}
-                      className={`bg-dark text-white`}
-                      placeholder={input.label}
-                      value={input.value}
-                      onChange={(e) => input.setValue(e.target.value)}
-                      required={input.required}
-                    />
-                  </FloatingLabel>
+                  {input.type === "select" ? (
+                    <FloatingLabel
+                      controlId="floatingSelect"
+                      label="Select Category"
+                      className="text-white"
+                    >
+                      <Form.Select
+                        aria-label="Floating label select example "
+                        className="bg-dark text-white mb-4"
+                        onChange={(e) => input.setValue(e.target.value)}
+                        value={input.value}
+                      >
+                        <option value="">Select Category</option>
+                        {SCRAP_CATEGORIES.map((cat) => {
+                          return (
+                            <option key={cat.id} value={cat.name}>
+                              {cat.name}
+                            </option>
+                          );
+                        })}
+                      </Form.Select>
+                    </FloatingLabel>
+                  ) : (
+                    <FloatingLabel
+                      controlId={index}
+                      label={input.label}
+                      className={`mb-4 text-white`}
+                    >
+                      <Form.Control
+                        type={input.type}
+                        className={`bg-dark text-white`}
+                        placeholder={input.label}
+                        value={input.value}
+                        onChange={(e) => input.setValue(e.target.value)}
+                        required={input.required}
+                      />
+                    </FloatingLabel>
+                  )}
                 </Col>
               );
             })}

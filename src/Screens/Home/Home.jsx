@@ -9,12 +9,14 @@ import { Redirect } from "react-router-dom";
 import { authActions } from "./../../redux/reducers/auth-slice";
 import CustomTable from "../../Components/CustomTable/CustomTable";
 import { getScrapsListByUserID } from "../../redux/reducers/scrap-slice";
+import Geocode from "react-geocode";
 
 const Home = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const session = useSelector((state) => state.auth.session);
   const loading = useSelector((state) => state.alert.loading);
+  Geocode.setApiKey("AIzaSyC0-r9vXk5Zbs8Ipua8X2lMvfW8xHOaRvM");
 
   let scrapsListByUserId = useSelector(
     (state) => state.scrap.scrapsListByUserId
@@ -22,7 +24,7 @@ const Home = () => {
 
   const columns = [
     // { header: "Sr. NO#", property: "id" },
-    { header: "Details", property: "Details" },
+    { header: "Name", property: "name" },
     { header: "Action", property: "action" },
   ];
 
@@ -31,13 +33,21 @@ const Home = () => {
       navigator.geolocation.getCurrentPosition(function (position) {
         console.log("Latitude is :", position.coords.latitude);
         console.log("Longitude is :", position.coords.longitude);
-        dispatch(
-          authActions.setSession({
-            location: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            },
-          })
+        Geocode.fromLatLng(
+          position.coords.latitude,
+          position.coords.longitude
+        ).then(
+          (response) => {
+            const address = response.results[0].formatted_address;
+            dispatch(
+              authActions.setSession({
+                address: address,
+              })
+            );
+          },
+          (error) => {
+            console.error(error);
+          }
         );
       });
     }

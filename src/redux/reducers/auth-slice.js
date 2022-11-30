@@ -13,10 +13,7 @@ const authSlice = createSlice({
       contactNo: "",
       token: "",
       profileImgUrl: "",
-      location: {
-        latitude: null,
-        longitude: null,
-      },
+      address: "",
     },
   },
   reducers: {
@@ -37,10 +34,7 @@ const authSlice = createSlice({
         contactNo: "",
         token: "",
         profileImgUrl: "",
-        location: {
-          latitude: null,
-          longitude: null,
-        },
+        address: "",
       };
     },
 

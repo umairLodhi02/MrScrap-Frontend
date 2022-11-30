@@ -1,72 +1,128 @@
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Container, Overlay, Tooltip } from "react-bootstrap";
 import { Box, Text } from "grommet";
 import Geocode from "react-geocode";
+import { useSelector } from "react-redux";
+import { useState, useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-const ScrapCard = ({ description, quantity, category, location, price }) => {
-  Geocode.fromLatLng("48.8583701", "2.2922926").then(
-    (response) => {
-      const address = response.results[0].formatted_address;
-      console.log({ address });
-    },
-    (error) => {
-      console.error(error);
-    }
+const ScrapCard = () => {
+  const scrapsListByUserId = useSelector(
+    (state) => state.scrap.scrapsListByUserId
   );
+  const params = useParams();
+  const [scrap, setScrap] = useState({});
+  const [notFound, setNotFound] = useState(false);
+  const target = useRef(null);
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const filteredScrapList = scrapsListByUserId.filter(
+      (scrap) => scrap._id === params.id
+    );
+
+    if (filteredScrapList.length === 0) {
+      setNotFound(true);
+    } else {
+      const scrapCpy = filteredScrapList[0];
+      console.log(scrapCpy);
+
+      setScrap(scrapCpy);
+    }
+  }, []);
+
   return (
     <>
-      <Card className="bg-dark">
-        <Card.Body>
-          <Row>
-            <Col md={8}>
-              <Row>
-                <Col className="description" md={12}>
-                  <p>{description}</p>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={6}>
+      <Container className="mt-5">
+        <Row>
+          <Col md={{ span: 10, offset: 1 }} className="">
+            <Card className="bg-dark">
+              <Card.Body>
+                {notFound ? (
                   <Row>
-                    <Col className="category" md={6}>
-                      <p>Quantity:</p>
-                    </Col>
-                    <Col md={6}>
-                      <p>{quantity ? `${quantity}kg` : "N/A"}</p>
+                    <Col
+                      md={{ span: 12, offset: 2 }}
+                      className="pt-5 pb-5 text-center"
+                    >
+                      <h5>Not Found</h5>
                     </Col>
                   </Row>
-                </Col>
-                <Col md={6}>
+                ) : (
                   <Row>
-                    <Col className="category" md={6}>
-                      <p>Price:</p>
+                    <Col md={12}>
+                      <Row>
+                        <Col className="description" md={12}>
+                          <p>{scrap.description}</p>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={6}>
+                          <Row>
+                            <Col className="category" md={6}>
+                              <p>Quantity:</p>
+                            </Col>
+                            <Col md={6}>
+                              <p>
+                                {scrap.quantity ? `${scrap.quantity}kg` : "N/A"}
+                              </p>
+                            </Col>
+                          </Row>
+                        </Col>
+                        <Col md={6}>
+                          <Row>
+                            <Col className="category" md={6}>
+                              <p>Price:</p>
+                            </Col>
+                            <Col md={6}>
+                              <p>
+                                {scrap.price ? `${scrap.price} pkr` : "N/A"}
+                              </p>
+                            </Col>
+                          </Row>
+                        </Col>
+                        <Col md={6}>
+                          <Row>
+                            <Col className="category" md={6}>
+                              <p>Category:</p>
+                            </Col>
+                            <Col md={6}>
+                              <p>
+                                {scrap.category ? `${scrap.category}` : "N/A"}
+                              </p>
+                            </Col>
+                          </Row>
+                        </Col>
+                        <Col md={6}>
+                          <Row>
+                            <Col className="price" md={6}>
+                              <p>Location:</p>
+                            </Col>
+                            <Col className="price" md={6}>
+                              <p
+                                ref={target}
+                                onClick={() => setShow(!show)}
+                                className="btn-link"
+                              >
+                                {scrap.address
+                                  ? `${scrap.address.slice(0, 10) + "..."}`
+                                  : "N/A"}
+                              </p>
+                              <Overlay
+                                target={target.current}
+                                show={show}
+                                placement="bottom"
+                                className={""}
+                              >
+                                {(props) => (
+                                  <Tooltip id="overlay-example" {...props}>
+                                    {scrap.address}
+                                  </Tooltip>
+                                )}
+                              </Overlay>
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
                     </Col>
-                    <Col md={6}>
-                      <p>{price ? `${quantity} pkr` : "N/A"}</p>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col md={6}>
-                  <Row>
-                    <Col className="category" md={6}>
-                      <p>Category:</p>
-                    </Col>
-                    <Col md={6}>
-                      <p>{category ? `${category}` : "N/A"}</p>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col md={6}>
-                  <Row>
-                    <Col className="price" md={6}>
-                      <p>Location:</p>
-                    </Col>
-                    <Col className="price" md={6}>
-                      <p>{location ? `${location}` : "N/A"}</p>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Col>
-            {/* <Col md={4}>
+                    {/* <Col md={4}>
               <Box
                 pad="small"
                 gap="small"
@@ -80,9 +136,13 @@ const ScrapCard = ({ description, quantity, category, location, price }) => {
                 <p>03057723360</p>
               </Box>
             </Col> */}
-          </Row>
-        </Card.Body>
-      </Card>
+                  </Row>
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

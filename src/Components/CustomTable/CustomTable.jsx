@@ -26,9 +26,9 @@ const CustomTable = ({
   const [modal, setModal] = useState(false);
   const [scrapToEdit, setScrapToEdit] = useState("");
   let [scrap, setScrap] = useState({
-    type: "",
     description: "",
     quantity: "",
+    category: "",
   });
   const [edit, setEdit] = useState(false);
 
@@ -45,9 +45,9 @@ const CustomTable = ({
     setEdit(true);
     setScrap((prevData) => ({
       ...prevData,
-      type: item.type,
       quantity: item.quantity,
       description: item.description,
+      category: item.category,
     }));
   };
   const handleAdd = () => {
