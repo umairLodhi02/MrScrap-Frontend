@@ -15,7 +15,7 @@ const Rates = () => {
           <Col md={{ span: 10, offset: 1 }}>
             <div className="table-resposive">
               <CustomTable
-                mainHeading={"Your Scraps"}
+                mainHeading={"Current Rates"}
                 addModal={false}
                 list={SCRAP_CATEGORIES}
                 columns={columns}

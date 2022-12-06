@@ -29,6 +29,7 @@ const CustomTable = ({
     description: "",
     quantity: "",
     category: "",
+    price: 0,
   });
   const [edit, setEdit] = useState(false);
 
@@ -48,6 +49,7 @@ const CustomTable = ({
       quantity: item.quantity,
       description: item.description,
       category: item.category,
+      price: item.price,
     }));
   };
   const handleAdd = () => {

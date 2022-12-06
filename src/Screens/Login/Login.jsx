@@ -75,15 +75,7 @@ const Login = (props) => {
             status={notification.type}
             title={""}
             message={notification.message}
-            // onClose={onClose}
           />
-          // <Container className="mt-4">
-          //   <Row>
-          //     <Col md={{ span: 6, offset: 3 }}>
-          //       <Alert variant={notification.type}>{notification.message}</Alert>
-          //     </Col>
-          //   </Row>
-          // </Container>
         )}
         <Box align="center" justify="center" fill pad={""}>
           <Card pad={"large"} background="dark-1">

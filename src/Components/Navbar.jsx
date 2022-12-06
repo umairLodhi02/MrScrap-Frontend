@@ -12,6 +12,8 @@ const Navbar = (props) => {
     // { href: "/scraps", label: "Scraps", className: "a" },
     { href: "/check-rates", label: "Check Rates", className: "a" },
     { href: "/profile", label: "Profile", className: "a" },
+    { href: "/give-feedback", label: "Feedback", className: "a" },
+    { href: "/give-Complain", label: "Complain", className: "a" },
   ];
   return (
     <div className="bg-dark">

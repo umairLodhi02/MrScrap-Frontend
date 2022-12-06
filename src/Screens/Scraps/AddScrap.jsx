@@ -4,7 +4,11 @@ import Loader from "../../Components/Loader";
 import { addScrap, updateScrap } from "../../redux/reducers/scrap-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { Notification } from "grommet";
-import { SCRAP_CATEGORIES } from "./../../constants/ScrapCategories";
+import { useEffect } from "react";
+import {
+  calculatePrice,
+  SCRAP_CATEGORIES,
+} from "./../../constants/ScrapCategories";
 
 const AddScrap = (props) => {
   const dispatch = useDispatch();
@@ -26,29 +30,47 @@ const AddScrap = (props) => {
       type: "text",
       required: true,
     },
-
-    {
-      label: "Enter Scrap Quantity",
-      value: scrap.quantity,
-      setValue: (val) =>
-        setScrap((prevData) => ({
-          ...prevData,
-          quantity: val,
-        })),
-      name: "quantity",
-      type: "number",
-      required: true,
-    },
     {
       label: "Select Category",
       value: scrap.category,
-      setValue: (val) =>
+      setValue: (val) => {
         setScrap((prevData) => ({
           ...prevData,
           category: val,
-        })),
+        }));
+        if (scrap.quantity) {
+          let price = calculatePrice(scrap.quantity, val);
+          setScrap((prevData) => ({
+            ...prevData,
+            price: price,
+          }));
+        }
+      },
       name: "quantity",
       type: "select",
+      required: true,
+    },
+    {
+      label: "Enter Scrap Quantity",
+      value: scrap.quantity,
+      setValue: (val) => {
+        setScrap((prevData) => ({
+          ...prevData,
+          quantity: val,
+        }));
+        if (!scrap.category) {
+          alert("Please select Category");
+          return;
+        } else {
+          let price = calculatePrice(val, scrap.category);
+          setScrap((prevData) => ({
+            ...prevData,
+            price: price,
+          }));
+        }
+      },
+      name: "quantity",
+      type: "number",
       required: true,
     },
   ];
@@ -65,6 +87,7 @@ const AddScrap = (props) => {
         address: session.address,
         description: scrap.description,
         category: scrap.category,
+        price: scrap.price,
       },
     };
     dispatch(addScrap(req, session.token));
@@ -78,6 +101,7 @@ const AddScrap = (props) => {
         address: session.address,
         category: scrap.category,
         description: scrap.description,
+        price: scrap.price,
       },
     };
 
@@ -92,6 +116,17 @@ const AddScrap = (props) => {
       handleAdd();
     }
   };
+
+  useEffect(() => {
+    if (scrap && scrap.category && scrap.quantity) {
+      let pr = calculatePrice(scrap.quantity, scrap.category);
+      console.log(pr);
+      setScrap((prevData) => ({
+        ...prevData,
+        price: pr,
+      }));
+    }
+  }, []);
   return (
     <>
       {loading && <Loader />}
@@ -134,7 +169,7 @@ const AddScrap = (props) => {
                         onChange={(e) => input.setValue(e.target.value)}
                         value={input.value}
                       >
-                        <option value="">Select Category</option>
+                        <option value={""}>Select Category</option>
                         {SCRAP_CATEGORIES.map((cat) => {
                           return (
                             <option key={cat.id} value={cat.name}>
@@ -145,20 +180,25 @@ const AddScrap = (props) => {
                       </Form.Select>
                     </FloatingLabel>
                   ) : (
-                    <FloatingLabel
-                      controlId={index}
-                      label={input.label}
-                      className={`mb-4 text-white`}
-                    >
-                      <Form.Control
-                        type={input.type}
-                        className={`bg-dark text-white`}
-                        placeholder={input.label}
-                        value={input.value}
-                        onChange={(e) => input.setValue(e.target.value)}
-                        required={input.required}
-                      />
-                    </FloatingLabel>
+                    <>
+                      <FloatingLabel
+                        controlId={index}
+                        label={input.label}
+                        className={`mb-4 text-white`}
+                      >
+                        <Form.Control
+                          type={input.type}
+                          className={`bg-dark text-white`}
+                          placeholder={input.label}
+                          value={input.value}
+                          onChange={(e) => input.setValue(e.target.value)}
+                          required={input.required}
+                        />
+                      </FloatingLabel>
+                      {input.name === "quantity" && (
+                        <p className="text-white">Price: {scrap.price}</p>
+                      )}
+                    </>
                   )}
                 </Col>
               );
@@ -171,7 +211,12 @@ const AddScrap = (props) => {
                   variant="light"
                   size="lg"
                   onClick={() => {
-                    setScrap({ quantity: "", type: "" });
+                    setScrap({
+                      quantity: "",
+                      description: "",
+                      price: 0,
+                      category: "",
+                    });
                     setModalShow(false);
                   }}
                 >

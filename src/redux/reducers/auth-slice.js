@@ -2,9 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 import { alertActions } from "./alert-slice";
 import { login } from "../../services/loginService";
 import { register, updateProfile } from "../../services/registerService";
+import { GiveFeedBackApi } from "../../services/feedbackService";
+import {
+  fetchComplainsByUserIdApi,
+  GiveComplainApi,
+  deleteComplainUserApi,
+} from "../../services/complainService";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
+    userComplainsList: [],
     session: {
       userId: "",
       username: "",
@@ -24,7 +31,9 @@ const authSlice = createSlice({
         ...action.payload,
       };
     },
-
+    setUserComplainsList: (state, action) => {
+      state.userComplainsList = action.payload;
+    },
     clearSession: (state) => {
       state.session = {
         userId: "",
@@ -198,6 +207,190 @@ export const updateUser = (req, token, userId) => async (dispatch) => {
       dispatch(alertActions.setLoading(false));
       return 400;
     }
+  } catch (err) {
+    console.log(err);
+    dispatch(
+      alertActions.showNotification({
+        message: `Something went wrong!`,
+        type: "warning",
+        open: true,
+      })
+    );
+    dispatch(alertActions.setLoading(false));
+  }
+};
+
+export const giveFeedBack = (req, token) => async (dispatch) => {
+  dispatch(alertActions.setLoading(true));
+
+  try {
+    const res = await GiveFeedBackApi(req, token);
+    if (res && res.success) {
+      dispatch(
+        alertActions.showNotification({
+          message: `${res.message}`,
+          type: "normal",
+          open: true,
+        })
+      );
+    } else if (res && res.message === "Invalid Token") {
+      dispatch(authActions.logout());
+    } else {
+      dispatch(
+        alertActions.showNotification({
+          message: `${res.message}`,
+          type: "warning",
+          open: true,
+        })
+      );
+    }
+
+    setTimeout(() => {
+      dispatch(alertActions.showNotification(null));
+    }, 3000);
+    dispatch(alertActions.setLoading(false));
+  } catch (err) {
+    console.log(err);
+    dispatch(
+      alertActions.showNotification({
+        message: `Something went wrong!`,
+        type: "warning",
+        open: true,
+      })
+    );
+    dispatch(alertActions.setLoading(false));
+  }
+};
+
+export const giveComplain = (req, token) => async (dispatch) => {
+  dispatch(alertActions.setLoading(true));
+
+  try {
+    const res = await GiveComplainApi(req, token);
+    if (res && res.success) {
+      dispatch(
+        alertActions.showNotification({
+          message: `${res.message}`,
+          type: "normal",
+          open: true,
+        })
+      );
+      dispatch(authActions.setUserComplainsList(res.data.complains));
+    } else if (res && res.message === "Invalid Token") {
+      dispatch(authActions.logout());
+    } else {
+      dispatch(
+        alertActions.showNotification({
+          message: `${res.message}`,
+          type: "warning",
+          open: true,
+        })
+      );
+    }
+
+    setTimeout(() => {
+      dispatch(alertActions.showNotification(null));
+    }, 3000);
+    dispatch(alertActions.setLoading(false));
+  } catch (err) {
+    console.log(err);
+    dispatch(
+      alertActions.showNotification({
+        message: `Something went wrong!`,
+        type: "warning",
+        open: true,
+      })
+    );
+    dispatch(alertActions.setLoading(false));
+  }
+};
+
+export const fetchComplainsUser = (token) => async (dispatch) => {
+  try {
+    dispatch(alertActions.setLoading(true));
+
+    const res = await fetchComplainsByUserIdApi(token);
+
+    if (res && res.success) {
+      dispatch(
+        alertActions.showNotification({
+          message: `${res.message}`,
+          open: true,
+          type: "normal",
+        })
+      );
+      dispatch(authActions.setUserComplainsList(res.data.complains));
+    } else if (res && res.code == 401) {
+      dispatch(
+        alertActions.showNotification({
+          message: `UnAuthorized`,
+          open: true,
+          type: "warning",
+        })
+      );
+      dispatch(authActions.logout());
+    } else {
+      dispatch(
+        alertActions.showNotification({
+          message: `${res.message}`,
+          type: "warning",
+          open: true,
+        })
+      );
+    }
+    setTimeout(() => {
+      dispatch(alertActions.showNotification(null));
+    }, 3000);
+    dispatch(alertActions.setLoading(false));
+  } catch (err) {
+    console.log(err);
+    dispatch(
+      alertActions.showNotification({
+        message: `Something went wrong!`,
+        type: "warning",
+        open: true,
+      })
+    );
+    dispatch(alertActions.setLoading(false));
+  }
+};
+
+export const deleteComplainUser = (token, complainId) => async (dispatch) => {
+  try {
+    dispatch(alertActions.setLoading(true));
+    const res = await deleteComplainUserApi(token, complainId);
+    if (res && res.success) {
+      dispatch(
+        alertActions.showNotification({
+          message: `${res.message}`,
+          open: true,
+          type: "normal",
+        })
+      );
+      console.log(res.data.scraps);
+      dispatch(authActions.setUserComplainsList(res.data.complains));
+    } else if (res && res.code == 401) {
+      dispatch(
+        alertActions.showNotification({
+          message: `UnAuthorized`,
+          open: true,
+          type: "warning",
+        })
+      );
+      dispatch(authActions.logout());
+    } else {
+      dispatch(
+        alertActions.showNotification({
+          message: `${res.message}`,
+          type: "warning",
+          open: true,
+        })
+      );
+    }
+    setTimeout(() => {
+      dispatch(alertActions.showNotification(null));
+    }, 3000);
+    dispatch(alertActions.setLoading(false));
   } catch (err) {
     console.log(err);
     dispatch(

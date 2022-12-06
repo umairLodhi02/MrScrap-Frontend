@@ -203,3 +203,56 @@ ul {
 .description:hover {
   color: #fff;
 }
+
+/* Accordion */
+.custom-accordion-title {
+  background-color: transparent;
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  outline: 0;
+  color: #fff;
+}
+.custom-accordion-item {
+  border-radius: 5px;
+  background-color: #2c2c45;
+}
+.custom-accordion-item h4 {
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.custom-accordion-content {
+  opacity: 0;
+  max-height: 0;
+  display: none;
+  transition: all 0.3s ease-in-out;
+}
+.custom-accordion-content p {
+  font-size: 18px;
+}
+.show {
+  opacity: 1;
+  max-height: fit-content;
+  display: block;
+}
+.line {
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+.line::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 0;
+  background: #fff;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  opacity: 0;
+}
+.show.line::before {
+  height: 2px;
+  opacity: 1;
+}
+/* Accordion */

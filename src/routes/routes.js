@@ -9,6 +9,8 @@ import AddScrap from "./../Screens/Scraps/AddScrap";
 import Scraps from "./../Screens/Scraps/Scraps";
 import Rates from "../Screens/Rates/Rates";
 import ScrapCard from "../Components/Cards/ScrapCard";
+import FeedBack from "../Screens/Feedback/FeedBack";
+import Complain from "./../Screens/Complain/Complain";
 
 const AppRoutes = () => {
   return (
@@ -40,6 +42,16 @@ const AppRoutes = () => {
           exact
           path="/check-rates"
           component={Rates}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/give-feedback"
+          component={FeedBack}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/give-complain"
+          component={Complain}
         ></ProtectedRoute>
         <Route exact path="/register" component={Register}></Route>
         <Route exact path="/" component={Login}></Route>
