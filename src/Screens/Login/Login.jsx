@@ -39,8 +39,7 @@ const Login = (props) => {
   }, [showNumber]);
 
   const handleSubmit = (event) => {
-    const { email, password, contactNo } = event.value;
-
+    console.log(email, password, contactNo);
     let req;
     if (contactNo) {
       req = {
@@ -107,7 +106,10 @@ const Login = (props) => {
                       required
                       name="number"
                       value={contactNo}
-                      onChange={(event) => setContactNo(event.target.value)}
+                      onChange={(event) => {
+                        console.log(event.target.value);
+                        setContactNo(event.target.value);
+                      }}
                     />
                   </FormField>
                 ) : (
@@ -148,7 +150,10 @@ const Login = (props) => {
                     }}
                     label="Login using Email"
                     plain
-                    onClick={() => setShowNumber(false)}
+                    onClick={() => {
+                      setEmail("");
+                      setShowNumber(false);
+                    }}
                   />
                 ) : (
                   <Button
@@ -160,7 +165,10 @@ const Login = (props) => {
                     }}
                     label="Login using Phone Number"
                     plain
-                    onClick={() => setShowNumber(true)}
+                    onClick={() => {
+                      setContactNo("");
+                      setShowNumber(true);
+                    }}
                   />
                 )}
 
