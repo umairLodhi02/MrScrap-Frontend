@@ -3,19 +3,19 @@ import { Box, Text } from "grommet";
 import Geocode from "react-geocode";
 import { useSelector } from "react-redux";
 import { useState, useRef, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 const ScrapCard = () => {
-  const scrapsListByUserId = useSelector(
-    (state) => state.scrap.scrapsListByUserId
-  );
+  const userScrapsList = useSelector((state) => state.scrap.userScrapsList);
   const params = useParams();
+  const location = useLocation();
+  console.log(location, userScrapsList);
   const [scrap, setScrap] = useState({});
   const [notFound, setNotFound] = useState(false);
   const target = useRef(null);
   const [show, setShow] = useState(false);
   useEffect(() => {
-    const filteredScrapList = scrapsListByUserId.filter(
+    const filteredScrapList = userScrapsList.filter(
       (scrap) => scrap._id === params.id
     );
 
@@ -33,15 +33,12 @@ const ScrapCard = () => {
     <>
       <Container className="mt-5">
         <Row>
-          <Col md={{ span: 10, offset: 1 }} className="">
+          <Col md={{ span: 10 }} className="m-auto">
             <Card className="bg-dark">
               <Card.Body>
                 {notFound ? (
                   <Row>
-                    <Col
-                      md={{ span: 12, offset: 2 }}
-                      className="pt-5 pb-5 text-center"
-                    >
+                    <Col md={{ span: 12 }} className="pt-5 pb-5 text-center">
                       <h5>Not Found</h5>
                     </Col>
                   </Row>

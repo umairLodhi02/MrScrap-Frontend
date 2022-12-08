@@ -4,7 +4,7 @@ import { Route, Redirect } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import { useSelector } from "react-redux";
 import Sidebar from "../Admin/Sidebar/Sidebar";
-const ProtectedRoute = (props) => {
+const AdminProtectedRoute = (props) => {
   const { exact, path, component } = props;
   const session = useSelector((state) => state.auth.session);
   const token = localStorage.getItem("token");
@@ -12,9 +12,9 @@ const ProtectedRoute = (props) => {
   return (
     <>
       <React.Fragment>
-        {token ? (
+        {token && session.isAdmin ? (
           <>
-            <Navbar />
+            <Sidebar />
 
             <Route path={path} component={component} exact={exact} />
           </>
@@ -26,4 +26,4 @@ const ProtectedRoute = (props) => {
   );
 };
 
-export default ProtectedRoute;
+export default AdminProtectedRoute;

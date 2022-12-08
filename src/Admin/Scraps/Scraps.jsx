@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-
-import Loader from "../../Components/Loader";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllScrapsList } from "./../../redux/reducers/scrap-slice";
 import CustomTable from "../../Components/CustomTable/CustomTable";
-import ScrapCard from "../../Components/Cards/ScrapCard";
+import Loader from "../../Components/Loader";
+import { getAllScrapsList } from "../../redux/reducers/scrap-slice";
 
 const Scraps = () => {
   const token = localStorage.getItem("token");

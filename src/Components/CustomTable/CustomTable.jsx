@@ -1,12 +1,12 @@
 import { Table, Button, Card, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import CustomPagination from "../CustomPagination";
-import AddScrap from "../../Screens/Scraps/AddScrap";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteScrapByUser } from "../../redux/reducers/scrap-slice";
 import Loader from "./../Loader";
 import { Notification } from "grommet";
 import { Link } from "react-router-dom";
+import AddScrap from "./AddScrap";
 const CustomTable = ({
   list,
   columns,
@@ -19,6 +19,7 @@ const CustomTable = ({
   const [currentPage, setCurrentPage] = useState(1);
   const notification = useSelector((state) => state.alert.notification);
   const loading = useSelector((state) => state.alert.loading);
+  const session = useSelector((state) => state.auth.session);
 
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
@@ -121,7 +122,11 @@ const CustomTable = ({
 
                           <td>
                             <Link
-                              to={`/home/${row._id}`}
+                              to={`${
+                                session.isAdmin
+                                  ? `/view-scraps/${row._id}`
+                                  : `/home/${row._id}`
+                              }`}
                               className="description"
                             >
                               {row.description ? row.description : "N/A"}

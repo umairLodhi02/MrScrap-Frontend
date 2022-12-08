@@ -1,14 +1,15 @@
 import { Row, Col, Button, Form, FloatingLabel, Modal } from "react-bootstrap";
 import swal from "sweetalert";
-import Loader from "../../Components/Loader";
-import { addScrap, updateScrap } from "../../redux/reducers/scrap-slice";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Notification } from "grommet";
 import { useEffect } from "react";
+import Loader from "../Loader";
 import {
   calculatePrice,
   SCRAP_CATEGORIES,
-} from "./../../constants/ScrapCategories";
+} from "../../constants/ScrapCategories";
+import { addScrap, updateScrap } from "../../redux/reducers/scrap-slice";
 
 const AddScrap = (props) => {
   const dispatch = useDispatch();

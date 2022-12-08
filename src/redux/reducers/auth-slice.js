@@ -21,6 +21,7 @@ const authSlice = createSlice({
       token: "",
       profileImgUrl: "",
       address: "",
+      isAdmin: null,
     },
   },
   reducers: {
@@ -44,6 +45,7 @@ const authSlice = createSlice({
         token: "",
         profileImgUrl: "",
         address: "",
+        isAdmin: null,
       };
     },
 
@@ -84,6 +86,7 @@ export const loginUser = (req) => async (dispatch) => {
           email: res.data.metadata.email,
           contactNo: res.data.metadata.contactNo,
           profileImgUrl: res.data.metadata.profileImgUrl,
+          isAdmin: res.data.metadata.isAdmin,
         })
       );
 

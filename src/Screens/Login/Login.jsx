@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/reducers/auth-slice";
 import { alertActions } from "./../../redux/reducers/alert-slice";
 const Login = (props) => {
-  const token = localStorage.getItem("token");
+  const session = useSelector((state) => state.auth.session);
   const [email, setEmail] = useState("");
   const [contactNo, setContactNo] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +32,7 @@ const Login = (props) => {
   const notification = useSelector((state) => state.alert.notification);
 
   const [showNumber, setShowNumber] = useState(false);
-  // const { session, setSession } = useContext(userContext);
+
   const dispatch = useDispatch();
   useEffect(() => {
     console.log("errr");
@@ -62,8 +62,10 @@ const Login = (props) => {
     dispatch(loginUser(req));
   };
 
-  if (token) {
-    return <Redirect to="home" />;
+  if (session.token && !session.isAdmin) {
+    return <Redirect to="/home" />;
+  } else if (session.token && session.isAdmin) {
+    return <Redirect to="/dashboard" />;
   } else
     return (
       <>

@@ -13,15 +13,15 @@ const scrapSlice = createSlice({
   name: "scrap",
   initialState: {
     allScrapsList: [],
-    scrapsListByUserId: [],
+    userScrapsList: [],
   },
   reducers: {
-    getAllScraps(state, action) {
+    setAllScrapsList(state, action) {
       console.log(action.payload);
       state.allScrapsList = action.payload;
     },
-    getScrapsByUserId(state, action) {
-      state.scrapsListByUserId = action.payload;
+    setUserScrapsList(state, action) {
+      state.userScrapsList = action.payload;
     },
   },
 });
@@ -44,7 +44,7 @@ export const getAllScrapsList = (token) => async (dispatch) => {
         })
       );
 
-      dispatch(scrapActions.getAllScraps(res.data.data));
+      dispatch(scrapActions.setAllScrapsList(res.data.data));
     } else if (res && res.code == 401) {
       dispatch(
         alertActions.showNotification({
@@ -80,7 +80,7 @@ export const getAllScrapsList = (token) => async (dispatch) => {
   }
 };
 
-export const getScrapsListByUserID = (token, userId) => async (dispatch) => {
+export const getUserScrapsList = (token, userId) => async (dispatch) => {
   try {
     dispatch(alertActions.setLoading(true));
 
@@ -94,7 +94,7 @@ export const getScrapsListByUserID = (token, userId) => async (dispatch) => {
         })
       );
 
-      dispatch(scrapActions.getScrapsByUserId(res.data.data));
+      dispatch(scrapActions.setUserScrapsList(res.data.data));
     } else if (res && res.code == 401) {
       dispatch(
         alertActions.showNotification({
@@ -144,7 +144,7 @@ export const deleteScrapByUser = (token, scrapId) => async (dispatch) => {
         })
       );
       console.log(res.data.scraps);
-      dispatch(scrapActions.getScrapsByUserId(res.data.scraps));
+      dispatch(scrapActions.setUserScrapsList(res.data.scraps));
     } else if (res && res.code == 401) {
       dispatch(
         alertActions.showNotification({
@@ -194,7 +194,7 @@ export const addScrap = (req, token, userId) => async (dispatch) => {
         })
       );
       console.log(res.data.scraps);
-      dispatch(scrapActions.getScrapsByUserId(res.data.scraps));
+      dispatch(scrapActions.setUserScrapsList(res.data.scraps));
     } else if (res && res.code == 401) {
       dispatch(
         alertActions.showNotification({

@@ -8,19 +8,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { authActions } from "./../../redux/reducers/auth-slice";
 import CustomTable from "../../Components/CustomTable/CustomTable";
-import { getScrapsListByUserID } from "../../redux/reducers/scrap-slice";
+import { getUserScrapsList } from "../../redux/reducers/scrap-slice";
 import Geocode from "react-geocode";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   const session = useSelector((state) => state.auth.session);
   const loading = useSelector((state) => state.alert.loading);
   Geocode.setApiKey("AIzaSyC0-r9vXk5Zbs8Ipua8X2lMvfW8xHOaRvM");
 
-  let scrapsListByUserId = useSelector(
-    (state) => state.scrap.scrapsListByUserId
-  );
+  let userScrapsList = useSelector((state) => state.scrap.userScrapsList);
 
   const columns = [
     // { header: "Sr. NO#", property: "id" },
@@ -52,7 +50,7 @@ const Home = () => {
       });
     }
     // fetchScraps();
-    dispatch(getScrapsListByUserID(token, session.userId));
+    dispatch(getUserScrapsList(session.token, session.userId));
   }, []);
   return (
     <>
@@ -63,7 +61,7 @@ const Home = () => {
             <CustomTable
               mainHeading={"Your Scraps"}
               addModal={true}
-              list={scrapsListByUserId}
+              list={userScrapsList}
               columns={columns}
               actionButtons={true}
             />
