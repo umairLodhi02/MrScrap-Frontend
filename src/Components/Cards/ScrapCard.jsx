@@ -7,17 +7,26 @@ import { useLocation, useParams } from "react-router-dom";
 
 const ScrapCard = () => {
   const userScrapsList = useSelector((state) => state.scrap.userScrapsList);
+  const allScrapsList = useSelector((state) => state.scrap.allScrapsList);
+
   const params = useParams();
   const location = useLocation();
-  console.log(location, userScrapsList);
+  console.log(location, allScrapsList);
   const [scrap, setScrap] = useState({});
   const [notFound, setNotFound] = useState(false);
   const target = useRef(null);
   const [show, setShow] = useState(false);
   useEffect(() => {
-    const filteredScrapList = userScrapsList.filter(
-      (scrap) => scrap._id === params.id
-    );
+    let filteredScrapList = [];
+    if (location.pathname.includes("view-scraps")) {
+      filteredScrapList = allScrapsList.filter(
+        (scrap) => scrap._id === params.id
+      );
+    } else {
+      filteredScrapList = userScrapsList.filter(
+        (scrap) => scrap._id === params.id
+      );
+    }
 
     if (filteredScrapList.length === 0) {
       setNotFound(true);
@@ -32,9 +41,9 @@ const ScrapCard = () => {
   return (
     <>
       <Container className="mt-5">
-        <Row>
+        <Row className="">
           <Col md={{ span: 10 }} className="m-auto">
-            <Card className="bg-dark">
+            <Card className="bg-dark px-3 pt-5">
               <Card.Body>
                 {notFound ? (
                   <Row>
@@ -45,14 +54,14 @@ const ScrapCard = () => {
                 ) : (
                   <Row>
                     <Col md={12}>
-                      <Row>
+                      <Row className="mb-5">
                         <Col className="description" md={12}>
-                          <p>{scrap.description}</p>
+                          <p className="h3">{scrap.description}</p>
                         </Col>
                       </Row>
-                      <Row>
+                      <Row className="">
                         <Col md={6}>
-                          <Row>
+                          <Row className="mb-5">
                             <Col className="category" md={6}>
                               <p>Quantity:</p>
                             </Col>
@@ -64,7 +73,7 @@ const ScrapCard = () => {
                           </Row>
                         </Col>
                         <Col md={6}>
-                          <Row>
+                          <Row className="mb-5">
                             <Col className="category" md={6}>
                               <p>Price:</p>
                             </Col>
@@ -76,7 +85,7 @@ const ScrapCard = () => {
                           </Row>
                         </Col>
                         <Col md={6}>
-                          <Row>
+                          <Row className="mb-5">
                             <Col className="category" md={6}>
                               <p>Category:</p>
                             </Col>
@@ -88,7 +97,17 @@ const ScrapCard = () => {
                           </Row>
                         </Col>
                         <Col md={6}>
-                          <Row>
+                          <Row className="mb-5">
+                            <Col className="category" md={6}>
+                              <p>Status:</p>
+                            </Col>
+                            <Col md={6}>
+                              <p>{scrap.status ? `${scrap.status}` : "N/A"}</p>
+                            </Col>
+                          </Row>
+                        </Col>
+                        <Col md={6}>
+                          <Row className="mb-5">
                             <Col className="price" md={6}>
                               <p>Location:</p>
                             </Col>
@@ -99,7 +118,7 @@ const ScrapCard = () => {
                                 className="btn-link"
                               >
                                 {scrap.address
-                                  ? `${scrap.address.slice(0, 10) + "..."}`
+                                  ? `${scrap.address.slice(0, 20) + "..."}`
                                   : "N/A"}
                               </p>
                               <Overlay

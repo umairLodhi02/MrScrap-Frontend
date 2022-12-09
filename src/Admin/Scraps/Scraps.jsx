@@ -12,8 +12,9 @@ const Scraps = () => {
   const loading = useSelector((state) => state.alert.loading);
 
   const columns = [
-    { header: "Quantity", property: "quantity" },
-    { header: "Type", property: "type" },
+    { header: "Name", property: "name" },
+    { header: "Status", property: "status" },
+    { header: "Action", property: "action" },
   ];
 
   useEffect(() => {
@@ -27,22 +28,13 @@ const Scraps = () => {
       <Container className={"mt-5"}>
         <Row>
           <Col lg={{ span: 10, offset: 1 }}>
-            {/* {allScrapsList &&
-              allScrapsList.map((scrap) => {
-                return (
-                  <ScrapCard
-                    description={scrap.description}
-                    price={scrap.price}
-                    quantity={scrap.quantity}
-                  />
-                );
-              })} */}
             <CustomTable
               columns={columns}
               list={allScrapsList}
               actionButtons={false}
               addModal={false}
               mainHeading={"All Scraps"}
+              admin={true}
             />
           </Col>
         </Row>

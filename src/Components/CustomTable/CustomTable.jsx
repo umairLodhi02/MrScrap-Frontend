@@ -1,4 +1,13 @@
-import { Table, Button, Card, Row, Col } from "react-bootstrap";
+import {
+  Table,
+  Button,
+  Card,
+  Row,
+  Col,
+  Modal,
+  Form,
+  FloatingLabel,
+} from "react-bootstrap";
 import { useState, useEffect } from "react";
 import CustomPagination from "../CustomPagination";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +16,7 @@ import Loader from "./../Loader";
 import { Notification } from "grommet";
 import { Link } from "react-router-dom";
 import AddScrap from "./AddScrap";
+import StatusModal from "../../Admin/Scraps/StatusModal";
 const CustomTable = ({
   list,
   columns,
@@ -15,24 +25,27 @@ const CustomTable = ({
   addModal,
   ratesTable,
   pageSize,
+  admin,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
   const notification = useSelector((state) => state.alert.notification);
   const loading = useSelector((state) => state.alert.loading);
   const session = useSelector((state) => state.auth.session);
-
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
+
+  const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(pageSize ? pageSize : 3);
   const [modal, setModal] = useState(false);
-  const [scrapToEdit, setScrapToEdit] = useState("");
+  const [scrapToEdit, setScrapToEdit] = useState({});
+  const [edit, setEdit] = useState(false);
+  const [statusModal, setStatusModal] = useState(false);
+
   let [scrap, setScrap] = useState({
     description: "",
     quantity: "",
     category: "",
     price: 0,
   });
-  const [edit, setEdit] = useState(false);
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -42,9 +55,8 @@ const CustomTable = ({
   const nPages = list && Math.ceil(list.length / recordsPerPage);
 
   const handleEdit = (item) => {
-    setScrapToEdit(item._id);
-    setModal(true);
-    setEdit(true);
+    setScrapToEdit(item);
+
     setScrap((prevData) => ({
       ...prevData,
       quantity: item.quantity,
@@ -52,11 +64,18 @@ const CustomTable = ({
       category: item.category,
       price: item.price,
     }));
+
+    if (!admin) {
+      setModal(true);
+      setEdit(true);
+    } else {
+      setStatusModal(true);
+    }
   };
   const handleAdd = () => {
     setModal(true);
     setEdit(false);
-    setScrapToEdit("");
+    setScrapToEdit({});
   };
 
   const handleDelete = (item) => {
@@ -132,6 +151,17 @@ const CustomTable = ({
                               {row.description ? row.description : "N/A"}
                             </Link>
                           </td>
+                          {admin && <td>{row.status ? row.status : "N/A"}</td>}
+                          {admin && (
+                            <td>
+                              <Button
+                                variant="link"
+                                onClick={() => handleEdit(row)}
+                              >
+                                Change Status
+                              </Button>
+                            </td>
+                          )}
                           {addModal && actionButtons && (
                             <td>
                               <Button
@@ -208,7 +238,7 @@ const CustomTable = ({
           modalShow={modal}
           setModalShow={setModal}
           scrapToEdit={scrapToEdit}
-          handleScrap={handleScrap}
+          // handleScrap={handleScrap}
           edit={edit}
           setEdit={setEdit}
           scrap={scrap}
@@ -216,6 +246,16 @@ const CustomTable = ({
           token={token}
           scrapList={[...list]}
         ></AddScrap>
+      )}
+
+      {admin && (
+        <StatusModal
+          modalShow={statusModal}
+          setModalShow={setStatusModal}
+          scrap={scrapToEdit}
+          setScrap={setScrapToEdit}
+          session={session}
+        />
       )}
     </>
   );

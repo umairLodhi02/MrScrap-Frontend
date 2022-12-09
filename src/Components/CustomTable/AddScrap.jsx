@@ -106,7 +106,7 @@ const AddScrap = (props) => {
       },
     };
 
-    dispatch(updateScrap(req, props.token, scrapToEdit, props.scrapList));
+    dispatch(updateScrap(req, props.token, scrapToEdit._id, props.scrapList));
     setModalShow(false);
   };
   const handleSubmit = (event) => {

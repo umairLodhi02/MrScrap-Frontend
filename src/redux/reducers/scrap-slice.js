@@ -5,6 +5,7 @@ import {
   getScrapsByUserIdApi,
   addScrapApi,
   updateScrapApi,
+  changeScrapStatusApi,
 } from "../../services/scrapService";
 import { alertActions } from "./alert-slice";
 import { authActions } from "./auth-slice";
@@ -257,6 +258,53 @@ export const updateScrap =
         );
       }
 
+      setTimeout(() => {
+        dispatch(alertActions.showNotification(null));
+      }, 3000);
+      dispatch(alertActions.setLoading(false));
+    } catch (err) {
+      console.log(err);
+      dispatch(
+        alertActions.showNotification({
+          message: `Something went wrong!`,
+          type: "warning",
+          open: true,
+        })
+      );
+      dispatch(alertActions.setLoading(false));
+    }
+  };
+
+export const changeScrapStatus =
+  (req, token, scrapId, scrapList) => async (dispatch) => {
+    try {
+      dispatch(alertActions.setLoading(true));
+
+      const res = await changeScrapStatusApi(req, token, scrapId);
+
+      if (res && res.success) {
+        dispatch(
+          alertActions.showNotification({
+            type: "normal",
+            message: `${res.message}`,
+            open: true,
+          })
+        );
+        setTimeout(() => {
+          dispatch(alertActions.showNotification(null));
+        }, 3000);
+        dispatch(alertActions.setLoading(false));
+        // window.location.reload(false);
+        return res;
+      } else {
+        dispatch(
+          alertActions.showNotification({
+            message: `${res.message}`,
+            type: "warning",
+            open: true,
+          })
+        );
+      }
       setTimeout(() => {
         dispatch(alertActions.showNotification(null));
       }, 3000);

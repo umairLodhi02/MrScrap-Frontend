@@ -11,3 +11,9 @@ export const calculatePrice = (quantity, category) => {
 
   return quantity * cat[0].rate;
 };
+
+export const SCRAP_STATUS = [
+  { id: 1, name: "Under Review" },
+  { id: 2, name: "Accepted" },
+  { id: 3, name: "Picked" },
+];

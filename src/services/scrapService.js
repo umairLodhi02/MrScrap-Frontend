@@ -66,3 +66,17 @@ export async function getScrapsByUserIdApi(token, userId) {
   const data = await requestXHR(httpData);
   return data;
 }
+
+export async function changeScrapStatusApi(req, token, scrapId) {
+  let httpData = {
+    method: "PUT",
+    url: `/user/change-status/${scrapId}`,
+    headers: {
+      "x-access-token": token,
+    },
+    request: req,
+  };
+
+  const data = await requestXHR(httpData);
+  return data;
+}
