@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { deleteComplainUser } from "../../redux/reducers/auth-slice";
-const CustomAccordion = ({ item }) => {
+const CustomAccordion = ({ item, admin }) => {
   const [isActive, setIsActive] = useState(false);
   const session = useSelector((state) => state.auth.session);
   const dispatct = useDispatch();
@@ -11,7 +11,7 @@ const CustomAccordion = ({ item }) => {
     dispatct(deleteComplainUser(session.token, item._id));
   };
   return (
-    <div className="custom-accordion-item mb-3 ">
+    <div className="custom-accordion-item mb-3">
       <button
         className="custom-accordion-title p-3 d-flex justify-content-between"
         onClick={() => setIsActive(!isActive)}
@@ -33,10 +33,15 @@ const CustomAccordion = ({ item }) => {
             {item.status ? item.status : "N/A"}
           </p>
         </div>
+
         <div className="text-end">
-          <Button variant="danger" onClick={handleDelete}>
-            Delete
-          </Button>
+          {admin ? (
+            <Button variant="info">Respond</Button>
+          ) : (
+            <Button variant="danger" onClick={handleDelete}>
+              Delete
+            </Button>
+          )}
         </div>
       </div>
       {/* )} */}

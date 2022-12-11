@@ -5,6 +5,8 @@ import {
 } from "@reduxjs/toolkit";
 import alertSlice from "./reducers/alert-slice";
 import authSlice from "./reducers/auth-slice";
+import adminSlice from "./reducers/admin-slice";
+
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import scrapSlice from "./reducers/scrap-slice";
@@ -18,6 +20,7 @@ const rootReducer = combineReducers({
   auth: authSlice.reducer,
   alert: alertSlice.reducer,
   scrap: scrapSlice.reducer,
+  admin: adminSlice.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

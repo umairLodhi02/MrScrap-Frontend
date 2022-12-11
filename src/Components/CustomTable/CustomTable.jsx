@@ -25,7 +25,8 @@ const CustomTable = ({
   addModal,
   ratesTable,
   pageSize,
-  admin,
+  changeStatus,
+  userList,
 }) => {
   const notification = useSelector((state) => state.alert.notification);
   const loading = useSelector((state) => state.alert.loading);
@@ -65,7 +66,7 @@ const CustomTable = ({
       price: item.price,
     }));
 
-    if (!admin) {
+    if (!changeStatus) {
       setModal(true);
       setEdit(true);
     } else {
@@ -120,7 +121,7 @@ const CustomTable = ({
             </div>
           ) : (
             <>
-              <Table responsive striped bordered hover variant="dark" size="md">
+              <Table responsive striped bordered hover variant="dark" size="lg">
                 <thead>
                   <tr>
                     {columns &&
@@ -139,20 +140,24 @@ const CustomTable = ({
                           {/* <td>{row.quantity}</td>
                           <td>{row.type}</td> */}
 
-                          <td>
-                            <Link
-                              to={`${
-                                session.isAdmin
-                                  ? `/view-scraps/${row._id}`
-                                  : `/home/${row._id}`
-                              }`}
-                              className="description"
-                            >
-                              {row.description ? row.description : "N/A"}
-                            </Link>
-                          </td>
-                          {admin && <td>{row.status ? row.status : "N/A"}</td>}
-                          {admin && (
+                          {!userList && (
+                            <td>
+                              <Link
+                                to={`${
+                                  session.isAdmin
+                                    ? `/view-scraps/${row._id}`
+                                    : `/home/${row._id}`
+                                }`}
+                                className="description"
+                              >
+                                {row.description ? row.description : "N/A"}
+                              </Link>
+                            </td>
+                          )}
+                          {changeStatus && (
+                            <td>{row.status ? row.status : "N/A"}</td>
+                          )}
+                          {changeStatus && (
                             <td>
                               <Button
                                 variant="link"
@@ -162,6 +167,20 @@ const CustomTable = ({
                               </Button>
                             </td>
                           )}
+
+                          {userList && (
+                            <td>
+                              <Link
+                                className="description"
+                                to={`/view-users/${row._id}`}
+                              >
+                                {row.username}
+                              </Link>
+                            </td>
+                          )}
+                          {userList && <td>{row.email}</td>}
+                          {userList && <td>{row.contactNo}</td>}
+
                           {addModal && actionButtons && (
                             <td>
                               <Button
@@ -248,7 +267,7 @@ const CustomTable = ({
         ></AddScrap>
       )}
 
-      {admin && (
+      {changeStatus && (
         <StatusModal
           modalShow={statusModal}
           setModalShow={setStatusModal}

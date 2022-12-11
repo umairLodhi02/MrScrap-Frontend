@@ -16,11 +16,12 @@ const Sidebar = () => {
     { href: "/view-scraps", label: "Scraps", className: "a" },
     { href: "/check-rates", label: "Check Rates", className: "a" },
     { href: "/profile", label: "Profile", className: "a" },
-    { href: "/view-feedback", label: "Feedbacks", className: "a" },
-    { href: "/view-Complain", label: "Complains", className: "a" },
+    { href: "/view-feedbacks", label: "Feedbacks", className: "a" },
+    { href: "/view-complains", label: "Complains", className: "a" },
   ];
+
   return (
-    <div class="bg-dark menu_container">
+    <div className="bg-dark menu_container">
       <Container>
         <Header pad="medium">
           <Box
@@ -69,7 +70,7 @@ const Sidebar = () => {
           {MenuList.map((li, index) => {
             return (
               <li key={index} className="py-3">
-                <Link to={li.href} className="a">
+                <Link onClick={handleClose} to={li.href} className="a">
                   {li.label}
                 </Link>
               </li>

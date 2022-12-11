@@ -27,7 +27,7 @@ const Login = (props) => {
   const [email, setEmail] = useState("");
   const [contactNo, setContactNo] = useState("");
   const [password, setPassword] = useState("");
-
+  const token = localStorage.getItem("token");
   const loading = useSelector((state) => state.alert.loading);
   const notification = useSelector((state) => state.alert.notification);
 
@@ -62,9 +62,9 @@ const Login = (props) => {
     dispatch(loginUser(req));
   };
 
-  if (session.token && !session.isAdmin) {
+  if (token && !session.isAdmin) {
     return <Redirect to="/home" />;
-  } else if (session.token && session.isAdmin) {
+  } else if (token && session.isAdmin) {
     return <Redirect to="/dashboard" />;
   } else
     return (

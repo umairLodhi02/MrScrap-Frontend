@@ -1,0 +1,44 @@
+.feedbacks_container {
+}
+
+.feedback {
+  border: 1px solid white;
+  padding: 10px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  background: rgb(193, 194, 201);
+  color: #191919;
+  border-radius: 5px;
+}
+.user {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
+  position: relative;
+}
+
+.user h4 {
+  font-weight: 800;
+  font-size: 22px;
+}
+.message {
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  border: 1px solid #191919;
+  border-radius: 5px;
+  padding: 1rem 0 1rem 1rem;
+  font-size: 16px;
+  opacity: 0;
+  display: none;
+}
+.message.show {
+  opacity: 1;
+  display: block;
+}
+.length {
+  position: absolute;
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 5px;
+}

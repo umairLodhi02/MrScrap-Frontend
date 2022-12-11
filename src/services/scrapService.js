@@ -43,7 +43,7 @@ export async function deleteScrap(token, scrapId) {
 export async function getScraps(token) {
   let httpData = {
     method: "GET",
-    url: `/user/getscraps`,
+    url: `/admin/getscraps`,
     headers: {
       "x-access-token": token,
     },
@@ -70,7 +70,7 @@ export async function getScrapsByUserIdApi(token, userId) {
 export async function changeScrapStatusApi(req, token, scrapId) {
   let httpData = {
     method: "PUT",
-    url: `/user/change-status/${scrapId}`,
+    url: `/admin/change-status/${scrapId}`,
     headers: {
       "x-access-token": token,
     },

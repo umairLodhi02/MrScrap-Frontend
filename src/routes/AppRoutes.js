@@ -14,6 +14,9 @@ import FeedBack from "../Screens/Feedback/FeedBack";
 import Complain from "../Screens/Complain/Complain";
 import Home from "../Screens/Home/Home";
 import AdminProtectedRoute from "./AdminRoutes";
+import UserCard from "../Components/Cards/UserCard";
+import Complains from "../Admin/Complains/Complains";
+import Feedbacks from "../Admin/Feedbacks/Feedbacks";
 
 const AppRoutes = () => {
   return (
@@ -52,11 +55,32 @@ const AppRoutes = () => {
         {/* ADMIN ROUTES */}
         <AdminProtectedRoute exact path="/dashboard" component={Dashboard} />
         <AdminProtectedRoute exact path="/view-users" component={Users} />
+        <AdminProtectedRoute
+          exact
+          path="/view-complains"
+          component={Complains}
+        />
+
+        <AdminProtectedRoute
+          exact
+          path="/view-users/:userId"
+          component={UserCard}
+        />
+        <AdminProtectedRoute
+          exact
+          path="/view-users/:userId/scraps"
+          component={Scraps}
+        />
         <AdminProtectedRoute exact path="/view-scraps" component={Scraps} />
         <AdminProtectedRoute
           exact
           path="/view-scraps/:id"
           component={ScrapCard}
+        />
+        <AdminProtectedRoute
+          exact
+          path="/view-feedbacks"
+          component={Feedbacks}
         />
 
         <Route exact path="/register" component={Register}></Route>

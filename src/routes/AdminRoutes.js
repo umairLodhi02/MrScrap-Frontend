@@ -9,21 +9,25 @@ const AdminProtectedRoute = (props) => {
   const session = useSelector((state) => state.auth.session);
   const token = localStorage.getItem("token");
 
-  return (
-    <>
-      <React.Fragment>
-        {token && session.isAdmin ? (
-          <>
-            <Sidebar />
+  if (!token) {
+    return <Redirect to={{ pathname: "/" }} />;
+  } else {
+    return (
+      <>
+        <React.Fragment>
+          {token && session.isAdmin ? (
+            <>
+              <Sidebar />
 
-            <Route path={path} component={component} exact={exact} />
-          </>
-        ) : (
-          <Redirect to={{ pathname: "/" }} />
-        )}
-      </React.Fragment>
-    </>
-  );
+              <Route path={path} component={component} exact={exact} />
+            </>
+          ) : (
+            <Redirect to={{ pathname: "/" }} />
+          )}
+        </React.Fragment>
+      </>
+    );
+  }
 };
 
 export default AdminProtectedRoute;
