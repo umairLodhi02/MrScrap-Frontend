@@ -31,7 +31,7 @@ const CustomAccordion = ({ item, admin, usersList }) => {
             {
               from_name: "Mr scrap",
               to_name: `${user.username}`,
-              to_email: `umairlodhi0003@gmail.com`,
+              to_email: `${user.email}`,
               complainId: `${item._id}`,
               complainSubject: `${item.subject}`,
               complainDescription: `${item.description}`,
